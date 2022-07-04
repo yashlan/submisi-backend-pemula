@@ -1,38 +1,39 @@
+const books = require('../model/books');
 
 const getAllBookHandler = (request, h) => {
-    const books = [];
-    const id = request.params;
-    const book = books.filter((book) => book.id === id);
-
-    if (book !== undefined) {
-        return h.response({
-            status: "success",
-            data: {
-                books: []
-            }
-        }).code(200);
-    }
-
-    if (books.length === 0) {
-        return h.response({
-            status: "success",
-            data: {
-                books: []
-            }
-        }).code(200);
-    }
-}
+  if (books !== undefined) {
+    return h.response({
+      status: 'success',
+      data: {
+        books: books.map((book) => ({
+          id: book.id,
+          name: book.name,
+          publisher: book.publisher,
+        })),
+      },
+    }).code(200);
+  }
+  return h.response({
+    status: 'error',
+    message: 'Gagal mengambil data buku',
+  }).code(500);
+};
 
 const getDetailBookByIdHandler = (request, h) => {
-    const id = request.params.bookId;
-    const books = [];
-    const book = books.filter((book) => book.id === id);
+  const { bookId, name, finished } = request.params;
+  const book = books.filter((b) => b.id === bookId)[0];
+  if (book !== undefined) {
     return h.response({
-        status: "success",
-        data: {
-            books: book.id
-        }
+      status: 'success',
+      data: {
+        book,
+      },
     }).code(200);
-}
+  }
+  return h.response({
+    status: 'fail',
+    message: 'Buku tidak ditemukan',
+  }).code(404);
+};
 
 module.exports = { getAllBookHandler, getDetailBookByIdHandler };
