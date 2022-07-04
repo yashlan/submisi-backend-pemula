@@ -1,8 +1,9 @@
 const books = require('../model/books');
+const { response } = require('../response');
 
 const getAllBookHandler = (request, h) => {
   if (books !== undefined) {
-    return h.response({
+    return response(h, {
       status: 'success',
       data: {
         books: books.map((book) => ({
@@ -11,29 +12,32 @@ const getAllBookHandler = (request, h) => {
           publisher: book.publisher,
         })),
       },
-    }).code(200);
+    }, 200);
   }
-  return h.response({
+
+  return response(h, {
     status: 'error',
     message: 'Gagal mengambil data buku',
-  }).code(500);
+  }, 500);
 };
 
 const getDetailBookByIdHandler = (request, h) => {
-  const { bookId, name, finished } = request.params;
+  const { bookId } = request.params;
   const book = books.filter((b) => b.id === bookId)[0];
+
   if (book !== undefined) {
-    return h.response({
+    return response(h, {
       status: 'success',
       data: {
         book,
       },
-    }).code(200);
+    }, 200);
   }
-  return h.response({
+
+  return response(h, {
     status: 'fail',
     message: 'Buku tidak ditemukan',
-  }).code(404);
+  }, 404);
 };
 
 module.exports = { getAllBookHandler, getDetailBookByIdHandler };
