@@ -1,5 +1,6 @@
 const { nanoid } = require('nanoid');
 const books = require('../model/books');
+const { response } = require('../response');
 
 const addNewBookHandler = (request, h) => {
   const {
@@ -32,17 +33,17 @@ const addNewBookHandler = (request, h) => {
   };
 
   if (newBook.name === null || newBook.name === undefined) {
-    return h.response({
+    return response(h, {
       status: 'fail',
       message: 'Gagal menambahkan buku. Mohon isi nama buku',
-    }).code(400);
+    }, 400);
   }
 
   if (newBook.readPage > newBook.pageCount) {
-    return h.response({
+    return response(h, {
       status: 'fail',
       message: 'Gagal menambahkan buku. readPage tidak boleh lebih besar dari pageCount',
-    }).code(400);
+    }, 400);
   }
 
   books.push(newBook);
@@ -50,19 +51,19 @@ const addNewBookHandler = (request, h) => {
   const isSuccess = books.filter((b) => b.id === id).length > 0;
 
   if (isSuccess) {
-    return h.response({
+    return response(h, {
       status: 'success',
       message: 'Buku berhasil ditambahkan',
       data: {
         bookId: newBook.id,
       },
-    }).code(201);
+    }, 201);
   }
 
-  return h.response({
+  return response(h, {
     status: 'error',
     message: 'Buku gagal ditambahkan',
-  }).code(500);
+  }, 500);
 };
 
 module.exports = { addNewBookHandler };
