@@ -1,21 +1,17 @@
 const { addNewBookHandler } = require('./handler/postBookHandler');
 const { getAllBookHandler, getDetailBookByIdHandler } = require('./handler/getBookHandler');
+const { editBookHandler } = require('./handler/updateBookHandler');
+const { deleteBookByIdHandler } = require('./handler/deleteBookHandler');
+const { response } = require('./response');
 
 const routes = [
   {
     method: '*',
-    path: '/',
-    handler: (request, h) => 'Halaman tidak dapat diakses dengan method tersebut',
-  },
-  {
-    method: '*',
-    path: '/about',
-    handler: (request, h) => 'Halaman tidak dapat diakses dengan method',
-  },
-  {
-    method: '*',
     path: '/{any*}',
-    handler: (request, h) => 'Halaman tidak ditemukan',
+    handler: (request, h) => response(h, {
+      code: 404,
+      message: 'Halaman tidak ditemukan',
+    }, 404),
   },
   {
     method: 'POST',
@@ -31,6 +27,16 @@ const routes = [
     method: 'GET',
     path: '/books/{bookId}',
     handler: getDetailBookByIdHandler,
+  },
+  {
+    method: 'PUT',
+    path: '/books/{bookId}',
+    handler: editBookHandler,
+  },
+  {
+    method: 'DELETE',
+    path: '/books/{bookId}',
+    handler: deleteBookByIdHandler,
   },
 ];
 
