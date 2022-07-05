@@ -2,6 +2,82 @@ const books = require('../model/books');
 const { response } = require('../response');
 
 const getAllBookHandler = (request, h) => {
+  const { name, reading, finished } = request.query;
+
+  if (name) {
+    const result = books.filter((b) => b.name.toLowerCase().includes(name.toLowerCase()));
+    return response(h, {
+      status: 'success',
+      data: {
+        books: result.map((b) => ({
+          id: b.id,
+          name: b.name,
+          publisher: b.publisher,
+        })),
+      },
+    }, 200);
+  }
+
+  if (reading) {
+    if (reading === '1') {
+      const result = books.filter((b) => b.reading === true);
+      return response(h, {
+        status: 'success',
+        data: {
+          books: result.map((b) => ({
+            id: b.id,
+            name: b.name,
+            publisher: b.publisher,
+          })),
+        },
+      }, 200);
+    }
+
+    if (reading === '0') {
+      const result = books.filter((b) => b.reading === false);
+      return response(h, {
+        status: 'success',
+        data: {
+          books: result.map((b) => ({
+            id: b.id,
+            name: b.name,
+            publisher: b.publisher,
+          })),
+        },
+      }, 200);
+    }
+  }
+
+  if (finished) {
+    if (finished === '1') {
+      const result = books.filter((b) => b.finished === true);
+      return response(h, {
+        status: 'success',
+        data: {
+          books: result.map((b) => ({
+            id: b.id,
+            name: b.name,
+            publisher: b.publisher,
+          })),
+        },
+      }, 200);
+    }
+
+    if (finished === '0') {
+      const result = books.filter((b) => b.finished === false);
+      return response(h, {
+        status: 'success',
+        data: {
+          books: result.map((b) => ({
+            id: b.id,
+            name: b.name,
+            publisher: b.publisher,
+          })),
+        },
+      }, 200);
+    }
+  }
+
   if (books !== undefined) {
     return response(h, {
       status: 'success',
